@@ -8,11 +8,29 @@
 import SwiftUI
 
 struct PokemonView: View {
+    @EnvironmentObject var viewModel : ViewModel
+    let pokemon: Pokemon
+    let dimensions: Double = 140
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(viewModel.getPokemonIndex(pokemon: pokemon)).png")) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: dimensions, height: dimensions)
+            } placeholder: {
+                ProgressView().frame(width: dimensions, height: dimensions)
+            }
+            Text("\(pokemon.name.capitalized)")
+                .font(.system(size: 16, weight: .regular, design: .monospaced))
+                .padding(.bottom, 20)
+        }
     }
+    
 }
+    #Preview {
+        PokemonView(pokemon: .samplePokemon).environmentObject(ViewModel())
+    }
 
-#Preview {
-    PokemonView()
-}
